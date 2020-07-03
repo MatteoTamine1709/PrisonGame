@@ -9,7 +9,7 @@ private:
 	sf::Texture m_texture;
 	int m_rectIndex = 0;
 	std::vector<sf::IntRect> m_textureRects;
-	int m_tickUpdate;
+	int m_tickUpdate = 30;
 	int m_tickCounter = 0;
 
 public:

@@ -6,9 +6,9 @@ class Player : public Animation
 {
 private:
 public:
-	Player(void);
-	Player(const std::string source, std::vector<sf::IntRect>& textureRects);
-	Player(std::string source);
+	Player(RessourceManager &manager);
+	Player(const std::string source, std::vector<sf::IntRect>& textureRects, RessourceManager &manager);
+	Player(std::string source, RessourceManager &manager);
 	~Player();
 
 };

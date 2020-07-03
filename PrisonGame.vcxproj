@@ -157,15 +157,21 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="RessourceManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="RessourceManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="AnimationTest.png" />
     <Image Include="PlayerSkin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PrisonGame.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

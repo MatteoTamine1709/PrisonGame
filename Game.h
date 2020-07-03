@@ -12,13 +12,14 @@ private:
 	virtual void update(void);
 	virtual void render(void);
 	std::vector<Animation> m_animations;
-	std::vector<std::pair<std::string, sf::Texture>> texturePair;
 
 public:
+	RessourceManager ressourceManager;
+
 	Game();
 	~Game();
 
 	virtual void run(void);
-	virtual void push_animation(Animation& animation);
+	virtual void push_animation(Animation &animation);
 };
 

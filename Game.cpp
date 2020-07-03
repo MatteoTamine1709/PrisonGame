@@ -73,7 +73,7 @@ void Game::run(void)
     }
 }
 
-void Game::push_animation(Animation& animation)
+void Game::push_animation(Animation &animation)
 {
     m_animations.push_back(animation);
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML/Graphics.hpp"
+#include "RessourceManager.h"
 #include <vector>
 
 class Animation
@@ -13,12 +14,15 @@ private:
 	int m_tickCounter = 0;
 
 public:
-	Animation(const std::string source, std::vector<sf::IntRect> &textureRects);
-	Animation(std::string source);
+	RessourceManager *ressourceManager;
+	Animation(const std::string source, std::vector<sf::IntRect> &textureRects, RessourceManager &manager);
+	Animation(std::string source, RessourceManager& manager);
 	~Animation();
 
 	void setTickUpdate(int tick);
-	void draw(sf::RenderWindow*& window);
+	void draw(sf::RenderWindow* &window);
 	void update(void);
+
+	void setPosition(const sf::Vector2f &pos);
 };
 

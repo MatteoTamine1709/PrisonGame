@@ -1,16 +1,39 @@
 #include "Animation.h"
+#include <iostream>
 
-Animation::Animation(const std::string source, std::vector<sf::IntRect> &textureRects)
-	: m_textureRects(textureRects)
+Animation::Animation(const std::string source, std::vector<sf::IntRect> &textureRects, RessourceManager& manager)
+	: m_textureRects(textureRects), ressourceManager(&manager)
 {
-	m_texture.loadFromFile(source);
+	int i = 0;
+
+	for (i = 0; i < ressourceManager->texturePair.size(); i++) {
+		if (ressourceManager->texturePair[i].first.compare(source) == 0) {
+			m_texture = ressourceManager->texturePair[i].second;
+			break;
+		}
+	}
+	if (i == ressourceManager->texturePair.size()) {
+		m_texture.loadFromFile(source);
+		ressourceManager->add(source, m_texture);
+	}
 	m_sprite.setTexture(m_texture);
 	m_sprite.setTextureRect(textureRects[0]);
 }
 
-Animation::Animation(std::string source)
+Animation::Animation(std::string source, RessourceManager& manager)
+	: ressourceManager(&manager)
 {
-	m_texture.loadFromFile(source);
+	int i = 0;
+
+	for (i = 0; i < ressourceManager->texturePair.size(); i++)
+		if (ressourceManager->texturePair[i].first.compare(source) == 0) {
+			m_texture = ressourceManager->texturePair[i].second;
+			break;
+		}
+	if (i == ressourceManager->texturePair.size()) {
+		m_texture.loadFromFile(source);
+		ressourceManager->add(source, m_texture);
+	}
 	m_sprite.setTexture(m_texture);
 }
 
@@ -36,7 +59,12 @@ void Animation::update(void)
 	m_sprite.setTextureRect(m_textureRects[m_rectIndex]);
 }
 
-void Animation::draw(sf::RenderWindow *&window)
+void Animation::setPosition(const sf::Vector2f& pos)
+{
+	m_sprite.setPosition(pos);
+}
+
+void Animation::draw(sf::RenderWindow* &window)
 {
 	window->draw(m_sprite);
 }

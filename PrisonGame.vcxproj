@@ -157,6 +157,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="HUD.cpp" />
+    <ClCompile Include="Log.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RessourceManager.cpp" />
@@ -166,12 +167,13 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="HUD.h" />
+    <ClInclude Include="Log.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="RessourceManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="AnimationTest.png" />
+    <Image Include="defaultTexture.jpg" />
     <Image Include="PlayerSkin.png" />
   </ItemGroup>
   <ItemGroup>

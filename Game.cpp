@@ -1,17 +1,18 @@
 #include "Game.h"
 #include <iostream>
+#include "Log.h"
 
 int count = 0;
 
 void* operator new(size_t size)
 {
-    std::cout << "Allocated " << ++count << " blocks of memory\n";
+    LOG.All("Allocated " + std::to_string(++count));
     return (malloc(size));
 }
 
 void operator delete(void* ptr)
 {
-    std::cout << --count << " block to free\n";
+    LOG.All("Free left : " + std::to_string(--count));
     free(ptr);
 }
 
@@ -104,7 +105,7 @@ void Game::push_hud(const std::string& name, HUD& hud)
     for (int i = 0; i < m_HUDS.size(); i++) {
         if (name.compare(*m_HUDS[i].first) == 0) {
             m_currentHUD = m_HUDS[i].second;
-            std::cout << "Hud with same name already loaded\n";
+            LOG.Warn ("Hud with same name already loaded\n");
             return;
         }
     }

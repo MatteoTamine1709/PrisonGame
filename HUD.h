@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 #include "Button.h"
+#include "RessourceManager.h"
+
 class HUD
 {
 private:

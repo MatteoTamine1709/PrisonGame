@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "RessourceManager.h"
 
 class Button
 {
@@ -19,7 +20,9 @@ public:
 	sf::Color m_hover_c = sf::Color::Black;
 	sf::Color m_clicked_c = sf::Color::Red;
 public:
-	Button(sf::Vector2i pos, sf::Vector2f size, const std::string& name, sf::Color color = sf::Color::White);
+	RessourceManager* ressourceManager;
+	Button(RessourceManager &manager, sf::Vector2i pos, sf::Vector2f size, const std::string& name, const sf::Color &color = sf::Color::White);
+	Button(RessourceManager& manager, sf::Vector2i pos, sf::Vector2f size, const std::string& name, const std::string& texturepath, const sf::Color& color = sf::Color::White);
 	~Button(void);
 	bool onClick(sf::Vector2i mousePos);
 	void update(void);

@@ -5,16 +5,7 @@ void Animation::setTexture(const std::string& str)
 {
 	int i = 0;
 
-	for (i = 0; i < ressourceManager->texturePair.size(); i++)
-		if (ressourceManager->texturePair[i].first.compare(str) == 0) {
-			m_texture = ressourceManager->texturePair[i].second;
-			break;
-		}
-	if (i == ressourceManager->texturePair.size()) {
-		m_texture = new sf::Texture();
-		m_texture->loadFromFile(str);
-		ressourceManager->add(str, m_texture);
-	}
+	m_texture = ressourceManager->getTexture(str);
 	m_sprite.setTexture(*m_texture);
 }
 

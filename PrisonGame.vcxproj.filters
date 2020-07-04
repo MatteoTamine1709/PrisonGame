@@ -16,11 +16,20 @@
     <Filter Include="Fichiers sources\Game">
       <UniqueIdentifier>{4c6acaf2-1368-47ec-9151-11d6ead1f387}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers sources\Util">
-      <UniqueIdentifier>{9280ef31-1fc3-4d11-a528-5b2fbca8a96b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fichiers sources\Graphics">
       <UniqueIdentifier>{ed534303-8050-48a0-bc56-293514f71251}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Game">
+      <UniqueIdentifier>{c832c739-02a7-40df-abd2-e406301d81b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Graphics">
+      <UniqueIdentifier>{35bd00dd-7042-4396-a751-e018423c018b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Utils">
+      <UniqueIdentifier>{c1fcec92-b49d-4aad-9531-61c456a18b70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Utils">
+      <UniqueIdentifier>{9280ef31-1fc3-4d11-a528-5b2fbca8a96b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -33,9 +42,6 @@
     <ClCompile Include="Animation.cpp">
       <Filter>Fichiers sources\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="RessourceManager.cpp">
-      <Filter>Fichiers sources\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Fichiers sources\Game</Filter>
     </ClCompile>
@@ -45,28 +51,34 @@
     <ClCompile Include="Button.cpp">
       <Filter>Fichiers sources\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>Fichiers sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="RessourceManager.cpp">
+      <Filter>Fichiers sources\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Player.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Game.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\Game</Filter>
     </ClInclude>
-    <ClInclude Include="Animation.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="RessourceManager.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="HUD.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="Player.h">
+      <Filter>Fichiers d%27en-tête\Game</Filter>
     </ClInclude>
     <ClInclude Include="Button.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Fichiers d%27en-tête\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>Fichiers d%27en-tête\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="RessourceManager.h">
+      <Filter>Fichiers d%27en-tête\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Fichiers d%27en-tête\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +86,9 @@
       <Filter>Fichiers de ressources</Filter>
     </Image>
     <Image Include="AnimationTest.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="defaultTexture.jpg">
       <Filter>Fichiers de ressources</Filter>
     </Image>
   </ItemGroup>

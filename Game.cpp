@@ -21,6 +21,16 @@ Game::Game()
     m_window = new sf::RenderWindow(sf::VideoMode(800, 600), "Prison Game"); 
     m_window->setFramerateLimit(60);
     m_window->setPosition({ m_window->getPosition().x, 0 });
+    m_window->setView(m_view);
+}
+
+Game::Game(sf::Vector2u size, unsigned frameRate, const char* windowName)
+{
+    m_window = new sf::RenderWindow(sf::VideoMode(size.x, size.y), windowName);
+    m_window->setFramerateLimit(frameRate);
+    m_window->setPosition({ m_window->getPosition().x, 0 });
+    m_view.setSize(size.x, size.y);
+    m_window->setView(m_view);
 }
 
 Game::~Game()
@@ -37,6 +47,9 @@ void Game::handleEvent(void)
             m_window->close();
         if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             m_window->close();
+        if (event.type == sf::Event::MouseButtonPressed && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            player.onClick(m_window);
+        }
         if (event.type == sf::Event::MouseButtonPressed && sf::Mouse::isButtonPressed(sf::Mouse::Left) &&
             m_currentHUD != nullptr)
             m_currentHUD->onClick(sf::Mouse::getPosition(*m_window));
@@ -54,7 +67,7 @@ void Game::fixedUpdate(void)
         m_animations[i].update();
     if (m_currentHUD != nullptr)
         m_currentHUD->update();
-
+    player.move();
 }
 
 void Game::render()
@@ -64,12 +77,13 @@ void Game::render()
         m_animations[i].draw(m_window);
     if (m_currentHUD != nullptr)
         m_currentHUD->draw(m_window, sf::Mouse::getPosition(*m_window));
+    player.draw(m_window);
     m_window->display();
 }
 
 void Game::run(void)
 {
-    constexpr unsigned TPS = 30; //ticks per seconds
+    constexpr unsigned TPS = 60; //ticks per seconds
     const sf::Time timePerUpdate = sf::seconds(1.0f / float(TPS));
     unsigned ticks = 0;
 

@@ -14,6 +14,7 @@ private:
 	int m_tick = 0;
 	int m_ClickTick = 15;
 	sf::Text m_text;
+	bool fontSet = false;
 
 public:
 	sf::Color m_idle_c = sf::Color::Blue;
@@ -24,6 +25,7 @@ public:
 	Button(RessourceManager &manager, sf::Vector2i pos, sf::Vector2f size, const std::string& name, const sf::Color &color = sf::Color::White);
 	Button(RessourceManager& manager, sf::Vector2i pos, sf::Vector2f size, const std::string& name, const std::string& texturepath, const sf::Color& color = sf::Color::White);
 	~Button(void);
+	void setFont(const std::string &str);
 	bool onClick(sf::Vector2i mousePos);
 	void update(void);
 	void draw(sf::RenderWindow *&window, sf::Vector2i mousePos);

@@ -9,19 +9,24 @@ void Animation::setTexture(const std::string& str)
 	m_sprite.setTexture(*m_texture);
 }
 
+Animation::Animation(void)
+{
+}
+
 Animation::Animation(const std::string source, std::vector<sf::IntRect> &textureRects, RessourceManager& manager)
 	: m_textureRects(textureRects), ressourceManager(&manager)
 {
 	setTexture(source);
-	m_sprite.setTexture(*m_texture);
 	m_sprite.setTextureRect(textureRects[0]);
+	m_sprite.setPosition({ 0, 0 });
 }
 
 Animation::Animation(std::string source, RessourceManager& manager)
 	: ressourceManager(&manager)
 {
 	setTexture(source);
-	m_sprite.setTexture(*m_texture);
+	sf::FloatRect rect = m_sprite.getLocalBounds();
+	m_sprite.setPosition({ 0, 0 });
 }
 
 Animation::~Animation()

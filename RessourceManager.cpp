@@ -9,21 +9,37 @@ RessourceManager::RessourceManager()
 		LOG.Error("Could not load default texture. EXIT");
 		exit(EXIT_FAILURE);
 	}
+	m_defaultFont = new sf::Font();
+	if (!m_defaultFont->loadFromFile("arial.ttf")) {
+		LOG.Error("Could not load default font. EXIT");
+		exit(EXIT_FAILURE);
+	}
 }
 
 RessourceManager::~RessourceManager()
 {
-	sf::Sprite sprite;
 	for (int i = 0; i < texturePair.size(); i++) {
 		delete (texturePair[i].second);
 		LOG.Info("Deleted Texture : " + texturePair[i].first);
 	}
+	delete (m_defaultTexture);
+	for (int i = 0; i < fontPair.size(); i++) {
+		delete (fontPair[i].second);
+		LOG.Info("Deleted Font : " + fontPair[i].first);
+	}
+	delete (m_defaultFont);
 }
 
 void RessourceManager::add(const std::string& source, sf::Texture* &texture)
 {
 	LOG.Info("Created new Texture : " + source);
 	texturePair.push_back(std::make_pair(source, texture));
+}
+
+void RessourceManager::add(const std::string& source, sf::Font*& font)
+{
+	LOG.Info("Created new Font : " + source);
+	fontPair.push_back(std::make_pair(source, font));
 }
 
 sf::Texture* RessourceManager::getTexture(const std::string& source)
@@ -40,9 +56,32 @@ sf::Texture* RessourceManager::getTexture(const std::string& source)
 		sf::Texture *texture = new sf::Texture();
 		if (!texture->loadFromFile(source)) {
 			LOG.Warn("Could not load " + source + " texture. Loading default texture");
+			delete (texture);
 			return (m_defaultTexture);
 		}
 		add(source, texture);
 		return (getTexture(source));
+	}
+}
+
+sf::Font* RessourceManager::getFont(const std::string& source)
+{
+	int i = 0;
+
+	for (i = 0; i < fontPair.size(); i++) {
+		if (fontPair[i].first.compare(source) == 0) {
+			LOG.Info("Using Texture : " + source);
+			return (fontPair[i].second);
+		}
+	}
+	if (i == fontPair.size()) {
+		sf::Font* font = new sf::Font();
+		if (!font->loadFromFile(source)) {
+			LOG.Warn("Could not load " + source + " font. Loading default font");
+			delete (font);
+			return (m_defaultFont);
+		}
+		add(source, font);
+		return (getFont(source));
 	}
 }

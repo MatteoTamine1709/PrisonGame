@@ -26,7 +26,7 @@ void Log::Info(const std::string& str)
 void Log::Warn(const std::string& str)
 {
 	if (m_logLevel >= LogLevel_e::Warning)
-		std::cout << "[WARN] : " << str << "\n";
+		std::cout << "[WARNING] : " << str << "\n";
 }
 void Log::Error(const std::string& str)
 {

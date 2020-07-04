@@ -7,14 +7,12 @@ int defaultClickFuntion(void)
 	return 0;
 }
 
-Button::Button(RessourceManager& manager, sf::Vector2i pos, sf::Vector2f size, const std::string& name, const sf::Color &color)
+Button::Button(RessourceManager& manager, sf::Vector2i pos, sf::Vector2f size, const std::string& name,
+	const sf::Color &color)
 	: ressourceManager(&manager), m_pos(pos), m_size(size), m_name(name), m_function(&defaultClickFuntion)
 {
 	int charSize = 30;
-	sf::Font* font = new sf::Font();
 
-	font->loadFromFile("arial.ttf");
-	m_text.setFont(*font);
 	m_text.setString(name);
 	while (charSize >= size.y)
 		charSize /= 2;
@@ -27,14 +25,12 @@ Button::Button(RessourceManager& manager, sf::Vector2i pos, sf::Vector2f size, c
 	m_rect.setFillColor(m_idle_c);
 }
 
-Button::Button(RessourceManager& manager, sf::Vector2i pos, sf::Vector2f size, const std::string& name, const std::string &texturepath, const sf::Color &color)
+Button::Button(RessourceManager& manager, sf::Vector2i pos, sf::Vector2f size, const std::string& name,
+	const std::string &texturepath, const sf::Color &color)
 	: ressourceManager(&manager), m_pos(pos), m_size(size), m_name(name), m_function(&defaultClickFuntion)
 {
 	int charSize = 30;
-	sf::Font* font = new sf::Font();
 
-	font->loadFromFile("arial.ttf");
-	m_text.setFont(*font);
 	m_text.setString(name);
 	while (charSize >= size.y)
 		charSize /= 2;
@@ -50,7 +46,12 @@ Button::Button(RessourceManager& manager, sf::Vector2i pos, sf::Vector2f size, c
 
 Button::~Button(void)
 {
-	delete (m_text.getFont());
+}
+
+void Button::setFont(const std::string& str)
+{
+	m_text.setFont(*ressourceManager->getFont(str));
+	fontSet = true;
 }
 
 bool Button::onClick(sf::Vector2i mousePos)
@@ -84,7 +85,8 @@ void Button::draw(sf::RenderWindow*& window, sf::Vector2i mousePos)
 			m_rect.setFillColor(m_idle_c);
 	}
 	window->draw(m_rect);
-	window->draw(m_text);
+	if (fontSet)
+		window->draw(m_text);
 }
 
 void Button::setTick(unsigned tick)

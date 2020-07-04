@@ -57,6 +57,9 @@
     <ClCompile Include="RessourceManager.cpp">
       <Filter>Fichiers sources\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Math.cpp">
+      <Filter>Fichiers sources\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -80,6 +83,12 @@
     <ClInclude Include="Log.h">
       <Filter>Fichiers d%27en-tête\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>Fichiers d%27en-tête\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="PlayerSkin.png">
@@ -89,6 +98,9 @@
       <Filter>Fichiers de ressources</Filter>
     </Image>
     <Image Include="defaultTexture.jpg">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="Map.jpg">
       <Filter>Fichiers de ressources</Filter>
     </Image>
   </ItemGroup>

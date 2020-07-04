@@ -5,8 +5,9 @@
 
 class Animation
 {
-private:
+protected:
 	sf::Sprite m_sprite;
+private:
 	sf::Texture* m_texture;
 	int m_rectIndex = 0;
 	std::vector<sf::IntRect> m_textureRects;
@@ -17,6 +18,7 @@ public:
 	RessourceManager *ressourceManager;
 
 	void setTexture(const std::string& str);
+	Animation(void);
 	Animation(const std::string source, std::vector<sf::IntRect> &textureRects, RessourceManager &manager);
 	Animation(std::string source, RessourceManager& manager);
 	~Animation();

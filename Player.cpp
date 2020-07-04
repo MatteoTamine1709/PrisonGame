@@ -19,5 +19,5 @@ Player::Player(const std::string source, RessourceManager &manager)
 
 Player::~Player()
 {
-	std::cout << "Delete Player" << std::endl;
+
 }

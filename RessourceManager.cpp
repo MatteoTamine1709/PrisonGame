@@ -1,8 +1,16 @@
 #include "RessourceManager.h"
 #include <iostream>
 
-void RessourceManager::add(const std::string& source, const sf::Texture& texture)
+RessourceManager::~RessourceManager()
 {
-	std::cout << "Added " << source << "\n";
+	for (int i = 0; i < texturePair.size(); i++) {
+		std::cout << "Deleted Texture : " << texturePair[i].first << "\n";
+		delete (texturePair[i].second);
+	}
+}
+
+void RessourceManager::add(const std::string& source, sf::Texture* texture)
+{
+	std::cout << "Created new Texture : " << source << "\n";
 	texturePair.push_back(std::make_pair(source, texture));
 }

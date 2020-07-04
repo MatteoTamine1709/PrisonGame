@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Player.h"
 #include "Animation.h"
+#include "HUD.h"
 
 class Game
 {
@@ -12,6 +13,8 @@ private:
 	virtual void update(void);
 	virtual void render(void);
 	std::vector<Animation> m_animations;
+	std::vector<std::pair<const std::string *, HUD *>> m_HUDS;
+	HUD* m_currentHUD = nullptr;
 
 public:
 	RessourceManager ressourceManager;
@@ -20,6 +23,8 @@ public:
 	~Game();
 
 	virtual void run(void);
-	virtual void push_animation(Animation &animation);
+	virtual void push_animation(Animation& animation);
+	virtual void push_hud(const std::string& name, HUD& hud);
+	virtual void changeHUD(const std::string& name);
 };
 

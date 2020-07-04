@@ -4,8 +4,8 @@
 class RessourceManager
 {
 public:
-	std::vector<std::pair<std::string, sf::Texture>> texturePair;
+	~RessourceManager();
+	std::vector<std::pair<std::string, sf::Texture* >> texturePair;
 
-	virtual void add(const std::string& source, const sf::Texture& texture);
+	virtual void add(const std::string& source, sf::Texture* texture);
 };
-

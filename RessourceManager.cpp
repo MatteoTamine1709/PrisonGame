@@ -4,6 +4,7 @@
 
 RessourceManager::RessourceManager()
 {
+	//aiQueue = new (std::deque<AI*>);
 	m_defaultTexture = new sf::Texture();
 	if (!m_defaultTexture->loadFromFile("defaultTexture.jpg")) {
 		LOG.Error("Could not load default texture. EXIT");
@@ -84,4 +85,24 @@ sf::Font* RessourceManager::getFont(const std::string& source)
 		add(source, font);
 		return (getFont(source));
 	}
+}
+
+void RessourceManager::push_ai(AI*& ai)
+{
+	if (aiQueue.size() < 1000)
+		aiQueue.push_back(ai);
+}
+
+void RessourceManager::processAI(void)
+{
+	AI *ai;
+	bool update = false;
+	for (int i = 0; i < 50 && aiQueue.size() > 0; i++) {
+		ai = aiQueue.front();
+		ai->getPath();
+		aiQueue.pop_front();
+		update = true;
+	}
+	if (update)
+		LOG.Info("AI left to process : " + std::to_string(aiQueue.size()));
 }

@@ -1,6 +1,8 @@
 #include "Game.h"
 #include <iostream>
 #include "Log.h"
+#include "Map.h"
+#include "AI.h"
 
 int count = 0;
 
@@ -30,6 +32,7 @@ Game::Game(sf::Vector2u size, unsigned frameRate, const char* windowName)
     m_window->setFramerateLimit(frameRate);
     m_window->setPosition({ m_window->getPosition().x, 0 });
     m_view.setSize(size.x, size.y);
+    m_view.setCenter(size.x / 2, size.y / 2);
     m_window->setView(m_view);
 }
 
@@ -49,6 +52,12 @@ void Game::handleEvent(void)
             m_window->close();
         if (event.type == sf::Event::MouseButtonPressed && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             player.onClick(m_window);
+            AI* ai = new AI(*map);
+            ai->pos = std::make_pair(8, 0);
+            ai->dest = std::make_pair(0, 0);
+            for (int i = 0; i < 1000; i++) {
+                ressourceManager.push_ai(ai);
+            }
         }
         if (event.type == sf::Event::MouseButtonPressed && sf::Mouse::isButtonPressed(sf::Mouse::Left) &&
             m_currentHUD != nullptr)
@@ -58,7 +67,6 @@ void Game::handleEvent(void)
 
 void Game::update(void)
 {
-
 }
 
 void Game::fixedUpdate(void)
@@ -67,6 +75,7 @@ void Game::fixedUpdate(void)
         m_animations[i].update();
     if (m_currentHUD != nullptr)
         m_currentHUD->update();
+    ressourceManager.processAI();
     player.move();
 }
 
@@ -90,6 +99,7 @@ void Game::run(void)
     sf::Clock timer;
     auto lastTime = sf::Time::Zero;
     auto lag = sf::Time::Zero;
+    int x = 0;
 
     while (m_window->isOpen()) {
 
@@ -102,6 +112,9 @@ void Game::run(void)
             ticks++;
             lag -= timePerUpdate;
             fixedUpdate();
+                /*for (int i = 0; i < ressourceManager.aiQueue.size(); i++) {
+                    ressourceManager.aiQueue.front()->getPath();
+                }*/
         }
         handleEvent();
         update();

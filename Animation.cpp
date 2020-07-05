@@ -25,7 +25,6 @@ Animation::Animation(std::string source, RessourceManager& manager)
 	: ressourceManager(&manager)
 {
 	setTexture(source);
-	sf::FloatRect rect = m_sprite.getLocalBounds();
 	m_sprite.setPosition({ 0, 0 });
 }
 

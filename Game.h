@@ -18,6 +18,7 @@ private:
 	HUD* m_currentHUD = nullptr;
 
 public:
+	Map* map;
 	RessourceManager ressourceManager;
 	Player player = Player("PlayerSkin.png", ressourceManager);
 

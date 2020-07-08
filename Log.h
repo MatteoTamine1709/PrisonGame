@@ -22,5 +22,6 @@ public:
 	void Info(const std::string& str);
 	void Warn(const std::string& str);
 	void Error(const std::string& str);
+	bool LogIf(LogLevel_e level);
 };
 extern Log LOG;

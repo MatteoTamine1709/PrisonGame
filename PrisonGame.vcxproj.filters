@@ -34,6 +34,9 @@
     <Filter Include="Fichiers sources\Game\AI">
       <UniqueIdentifier>{043788fd-5a80-4ae3-a50a-6dc533f7e2b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Game\AI">
+      <UniqueIdentifier>{e18a91de-ca71-49a3-8570-b7cf235f4782}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -69,6 +72,12 @@
     <ClCompile Include="AI.cpp">
       <Filter>Fichiers sources\Game\AI</Filter>
     </ClCompile>
+    <ClCompile Include="ParticuleEngine.cpp">
+      <Filter>Fichiers sources\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="FPSCounter.cpp">
+      <Filter>Fichiers sources\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -96,10 +105,16 @@
       <Filter>Fichiers d%27en-tête\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Map.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticuleEngine.h">
+      <Filter>Fichiers d%27en-tête\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="AI.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\Game\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="FPSCounter.h">
+      <Filter>Fichiers d%27en-tête\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

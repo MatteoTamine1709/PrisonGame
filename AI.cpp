@@ -1,13 +1,62 @@
 #include "AI.h"
+#include "Math.h"
+#include "Log.h"
 
 void AI::getPath(void)
 {
-    aStarSearch(*m_map->grid, pos, dest);
+    while (!Path.empty())
+        Path.pop();
+    if (m_map == nullptr)
+        return;
+    aStarSearch(*m_map->grid, Pos, Dest);
+    if (LOG.LogIf(LogLevel_e::All))
+        printPath();
+    if (!Path.empty()) {
+        Pair p = Path.top();
+        Dest.x = p.first;
+        Dest.y = p.second;
+        float d = Math::dist(Pos.x, Pos.y, Dest.x, Dest.y);
+        if (d == 0)
+            d = 1;
+        m_dir.x = (Dest.x - Pos.x) / d * m_speed;
+        m_dir.y = (Dest.y - Pos.y) / d * m_speed;
+        Path.pop();
+    }
+}
+
+void AI::setMap(Map* map)
+{
+    m_map = map;
+    if (m_map == nullptr)
+        return;
+    int ROW = m_map->ROW;
+    int COL = m_map->COL;
+    int i = 0, j = 0;
+    m_cellDetails.clear();
+    m_cellDetails.reserve(sizeof(std::vector<cell>) * ROW);
+    for (i = 0; i < ROW; i++) {
+        std::vector<cell> v;
+        v.reserve(sizeof(cell) * COL);
+        for (j = 0; j < COL; j++) {
+            cell c;
+            v.push_back(c);
+        }
+        m_cellDetails.push_back(v);
+    }
+    m_closedList.reserve(sizeof(std::vector<bool>)* ROW);
+    for (int i = 0; i < ROW; i++) {
+        std::vector<bool> b;
+        b.reserve(sizeof(bool) * COL);
+        for (int j = 0; j < COL; j++)
+            b.push_back(false);
+        m_closedList.push_back(b);
+    }
 }
 
 AI::AI(Map &map)
     : m_map(&map)
 {
+    setMap(m_map);
 }
 
 AI::AI(void)
@@ -40,111 +89,142 @@ double AI::calculateHValue(int row, int col, Pair dest)
         + (col - dest.second) * (col - dest.second)));
 }
 
-void AI::tracePath(std::vector<std::vector<cell>> cellDetails, Pair dest)
+void AI::tracePath(std::vector<std::vector<cell>> m_cellDetails, Pair dest)
 {
-    printf("\nThe Path is ");
     int row = dest.first;
     int col = dest.second;
 
-    while (!(cellDetails[row][col].parent_i == row
-        && cellDetails[row][col].parent_j == col)) {
-        Path.push(std::make_pair(row, col));
-        int temp_row = cellDetails[row][col].parent_i;
-        int temp_col = cellDetails[row][col].parent_j;
+    while (!(m_cellDetails[row][col].parent_i == row
+        && m_cellDetails[row][col].parent_j == col)) {
+        Path.push(std::make_pair(col * 10, row * 10));
+        int temp_row = m_cellDetails[row][col].parent_i;
+        int temp_col = m_cellDetails[row][col].parent_j;
         row = temp_row;
         col = temp_col;
     }
-    Path.push(std::make_pair(row, col));
-    while (!Path.empty())
-    {
+}
+
+void AI::printPath(void)
+{
+    if (Path.empty())
+        return;
+    std::stack<Pair> temp;
+    std::cout << "Path for AI\n";
+    while (!Path.empty()) {
         std::pair<int, int> p = Path.top();
         Path.pop();
         printf("-> (%d,%d) ", p.first, p.second);
+        temp.push(p);
+    }
+    while (!temp.empty()) {
+        std::pair<int, int> p = temp.top();
+        temp.pop();
+        Path.push(p);
+    }
+    std::cout << "\n\n";
+}
+
+void AI::move(void)
+{
+    if (m_dir.x != 0 || m_dir.y != 0)
+        Pos += m_dir;
+    if (Path.size() == 1 && (Math::dist(Pos.x, Pos.y, Dest.x, Dest.y) <= 1)) {
+        Pair p = Path.top();
+        Pos.x = p.first;
+        Pos.y = p.second;
+        Dest.x = p.first;
+        Dest.y = p.second;
+        Path.pop();
+    }
+    if (!Path.empty()) {
+        if (Math::dist(Pos.x, Pos.y, Dest.x, Dest.y) <= m_speed) {
+            Pair p = Path.top();
+            Dest.x = p.first;
+            Dest.y = p.second;
+            float d = Math::dist(Pos.x, Pos.y, Dest.x, Dest.y);
+            m_dir.x = (Dest.x - Pos.x) / d * m_speed;
+            m_dir.y = (Dest.y - Pos.y) / d * m_speed;
+            Path.pop();
+        }
+    } else {
+        m_dir = { 0, 0 };
     }
 }
 
-bool AI::checkCell(int i, int j, int pi, int pj, std::vector<std::vector<cell>> &cellDetails, std::set<pPair>& openList,
-    std::vector<std::vector<bool>>& closedList, Arr2D& grid, float val)
+bool AI::checkCell(int i, int j, int pi, int pj, std::vector<std::vector<cell>> &m_cellDetails, std::set<pPair>& openList,
+    Arr2D& grid, float val, Pair& dest)
 {
     double gNew, hNew, fNew;
 
     if (isValid(i, j) == true) {
         if (isDestination(i, j, dest) == true) {
-            cellDetails[i][j].parent_i = pi;
-            cellDetails[i][j].parent_j = pj;
-            //printf("The destination cell is found\n");
-            //tracePath(cellDetails, dest);
+            m_cellDetails[i][j].parent_i = pi;
+            m_cellDetails[i][j].parent_j = pj;
+            tracePath(m_cellDetails, dest);
             return (true);
-        } else if (closedList[i][j] == false &&
+        } else if (m_closedList[i][j] == false &&
             isUnBlocked(grid, i, j) == true) {
-            gNew = cellDetails[pi][pj].g + val;
+            gNew = m_cellDetails[pi][pj].g + val;
             hNew = calculateHValue(i, j, dest);
             fNew = gNew + hNew;
-            if (cellDetails[i][j].f == FLT_MAX ||
-                cellDetails[i][j].f > fNew) {
+            if (m_cellDetails[i][j].f == FLT_MAX ||
+                m_cellDetails[i][j].f > fNew) {
                 openList.insert(std::make_pair(fNew, std::make_pair(i, j)));
-                cellDetails[i][j].f = fNew;
-                cellDetails[i][j].g = gNew;
-                cellDetails[i][j].h = hNew;
-                cellDetails[i][j].parent_i = pi;
-                cellDetails[i][j].parent_j = pj;
+                m_cellDetails[i][j].f = fNew;
+                m_cellDetails[i][j].g = gNew;
+                m_cellDetails[i][j].h = hNew;
+                m_cellDetails[i][j].parent_i = pi;
+                m_cellDetails[i][j].parent_j = pj;
             }
         }
     }
     return(false);
 }
 
-void AI::aStarSearch(Arr2D& grid, Pair& src, Pair& dest)
+void AI::aStarSearch(Arr2D& grid, sf::Vector2f& srcA, sf::Vector2f& destA)
 {
+    std::pair<int, int> src = std::make_pair(srcA.y / 10, srcA.x / 10);
+    std::pair<int, int> dest = std::make_pair(destA.x / 10, destA.y / 10);
     int ROW = m_map->ROW;
     int COL = m_map->COL;
     if (isValid(src.first, src.second) == false) {
-        printf("Source is invalid\n");
+        LOG.Warn("Source is invalid");
         return;
     }
     if (isValid(dest.first, dest.second) == false) {
+        Dest = Pos;
         return;
     }
     if (isUnBlocked(grid, src.first, src.second) == false ||
         isUnBlocked(grid, dest.first, dest.second) == false) {
-        printf("Source or the destination is blocked\n");
+        Dest = Pos;
         return;
     }
     if (isDestination(src.first, src.second, dest) == true) {
-        printf("We are already at the destination\n");
+        Dest = Pos;
         return;
     }
-    std::vector<std::vector<bool>> closedList;
-    for (int i = 0; i < ROW; i++) {
-        std::vector<bool> b;
-        for (int j = 0; j < COL; j++) {
-            b.push_back(false);
-        }
-        closedList.push_back(b);
-    }
-    std::vector<std::vector<cell>> cellDetails;
 
+    for (int i = 0; i < ROW; i++)
+        for (int j = 0; j < COL; j++)
+            m_closedList[i][j] = false;
     int i, j;
 
     for (i = 0; i < ROW; i++) {
-        std::vector<cell> c;
         for (j = 0; j < COL; j++) {
-            cell ce;
-            ce.f = FLT_MAX;
-            ce.g = FLT_MAX;
-            ce.h = FLT_MAX;
-            ce.parent_i = -1;
-            ce.parent_j = -1;
-            c.push_back(ce);
+            m_cellDetails[i][j].f = FLT_MAX;
+            m_cellDetails[i][j].g = FLT_MAX;
+            m_cellDetails[i][j].h = FLT_MAX;
+            m_cellDetails[i][j].parent_i = -1;
+            m_cellDetails[i][j].parent_j = -1;
         }
-        cellDetails.push_back(c);
     }
     i = src.first, j = src.second;
-    cellDetails[i][j].f = 0.0;
-    cellDetails[i][j].g = 0.0;
-    cellDetails[i][j].h = 0.0;
-    cellDetails[i][j].parent_i = i;
-    cellDetails[i][j].parent_j = j;
+    m_cellDetails[i][j].f = 0.0;
+    m_cellDetails[i][j].g = 0.0;
+    m_cellDetails[i][j].h = 0.0;
+    m_cellDetails[i][j].parent_i = i;
+    m_cellDetails[i][j].parent_j = j;
     std::set<pPair> openList;
     openList.insert(std::make_pair(0.0, std::make_pair(i, j)));
     bool foundDest = false;
@@ -154,15 +234,15 @@ void AI::aStarSearch(Arr2D& grid, Pair& src, Pair& dest)
         openList.erase(openList.begin());
         i = p.second.first;
         j = p.second.second;
-        closedList[i][j] = true;
-        if (checkCell(i - 1, j, i, j, cellDetails, openList, closedList, grid, 1.0f) ||
-            checkCell(i + 1, j, i, j, cellDetails, openList, closedList, grid, 1.0f) ||
-            checkCell(i, j - 1, i, j, cellDetails, openList, closedList, grid, 1.0f) ||
-            checkCell(i, j + 1, i, j, cellDetails, openList, closedList, grid, 1.0f) ||
-            checkCell(i - 1, j - 1, i, j, cellDetails, openList, closedList, grid, 1.414f) ||
-            checkCell(i + 1, j - 1, i, j, cellDetails, openList, closedList, grid, 1.414f) ||
-            checkCell(i - 1, j + 1, i, j, cellDetails, openList, closedList, grid, 1.414f) ||
-            checkCell(i + 1, j + 1, i, j, cellDetails, openList, closedList, grid, 1.414f)) {
+        m_closedList[i][j] = true;
+        if (checkCell(i - 1, j, i, j, m_cellDetails, openList, grid, 1.0f, dest) ||
+            checkCell(i + 1, j, i, j, m_cellDetails, openList, grid, 1.0f, dest) ||
+            checkCell(i, j - 1, i, j, m_cellDetails, openList, grid, 1.0f, dest) ||
+            checkCell(i, j + 1, i, j, m_cellDetails, openList, grid, 1.0f, dest) ||
+            checkCell(i - 1, j - 1, i, j, m_cellDetails, openList, grid, 1.414f, dest) ||
+            checkCell(i + 1, j - 1, i, j, m_cellDetails, openList, grid, 1.414f, dest) ||
+            checkCell(i - 1, j + 1, i, j, m_cellDetails, openList, grid, 1.414f, dest) ||
+            checkCell(i + 1, j + 1, i, j, m_cellDetails, openList, grid, 1.414f, dest)) {
             return;
         }
     }

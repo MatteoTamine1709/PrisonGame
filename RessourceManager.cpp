@@ -2,9 +2,47 @@
 #include "Log.h"
 #include <iostream>
 
+void RessourceManager::copyTextureFromManager(RessourceManager& manager)
+{
+	for (int i = 0; i < manager.texturePair.size(); i++) {
+		bool found = false;
+		for (int j = 0; j < texturePair.size(); j++) {
+			if (manager.texturePair[i].first.compare(texturePair[j].first) == 0)
+				found = true;
+		}
+		if (!found)
+			add(manager.texturePair[i].first, manager.texturePair[i].second);
+	}
+}
+
+void RessourceManager::copyFontFromManager(RessourceManager& manager)
+{
+	for (int i = 0; i < manager.fontPair.size(); i++) {
+		bool found = false;
+		for (int j = 0; j < fontPair.size(); j++) {
+			if (manager.fontPair[i].first.compare(fontPair[j].first) == 0)
+				found = true;
+		}
+		if (!found)
+			add(manager.fontPair[i].first, manager.fontPair[i].second);
+	}
+}
+
+void RessourceManager::copyAIFromManager(RessourceManager& manager)
+{
+	for (int i = 0; i < manager.aiQueue.size(); i++) {
+		bool found = false;
+		for (int j = 0; j < aiQueue.size(); j++) {
+			if (manager.aiQueue[i] == aiQueue[j])
+				found = true;
+		}
+		if (!found)
+			push_ai(manager.aiQueue[i]);
+	}
+}
+
 RessourceManager::RessourceManager()
 {
-	//aiQueue = new (std::deque<AI*>);
 	m_defaultTexture = new sf::Texture();
 	if (!m_defaultTexture->loadFromFile("defaultTexture.jpg")) {
 		LOG.Error("Could not load default texture. EXIT");
@@ -89,7 +127,7 @@ sf::Font* RessourceManager::getFont(const std::string& source)
 
 void RessourceManager::push_ai(AI*& ai)
 {
-	if (aiQueue.size() < 1000)
+	if (aiQueue.size() < 500)
 		aiQueue.push_back(ai);
 }
 
@@ -105,4 +143,16 @@ void RessourceManager::processAI(void)
 	}
 	if (update)
 		LOG.Info("AI left to process : " + std::to_string(aiQueue.size()));
+}
+
+float RessourceManager::getFPS(sf::RenderWindow*& window)
+{
+	return fps.display(window);
+}
+
+void RessourceManager::copyRessourceManager(RessourceManager& manager)
+{
+	copyTextureFromManager(manager);
+	copyFontFromManager(manager);
+	copyAIFromManager(manager);
 }

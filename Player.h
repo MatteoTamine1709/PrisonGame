@@ -2,22 +2,20 @@
 #include <SFML/Graphics.hpp>
 #include "Math.h"
 #include "Animation.h"
+#include "AI.h"
 
-class Player : public Animation
+class Player : public Animation, public AI
 {
 private:
-	sf::Vector2f m_pos = { 0, 0 };
-	sf::Vector2f m_dir = { 0, 0 };
-	sf::Vector2f m_destination;
-	float m_speed = 5;
+	sf::Vector2f m_size;
 public:
+	Player(void);
 	Player(RessourceManager &manager);
 	Player(const std::string source, std::vector<sf::IntRect>& textureRects, RessourceManager &manager);
 	Player(std::string source, RessourceManager &manager);
 	~Player();
 
-	virtual void onClick(sf::RenderWindow*& window);
+	virtual bool onClick(sf::RenderWindow*& window);
 	virtual void move();
-
 };
 

@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Animation.h"
 #include "HUD.h"
+#include "ParticuleEngine.h"
 
 class Game
 {
@@ -16,9 +17,9 @@ private:
 	std::vector<Animation> m_animations;
 	std::vector<std::pair<const std::string *, HUD *>> m_HUDS;
 	HUD* m_currentHUD = nullptr;
+	Map* m_map;
 
 public:
-	Map* map;
 	RessourceManager ressourceManager;
 	Player player = Player("PlayerSkin.png", ressourceManager);
 
@@ -30,5 +31,6 @@ public:
 	virtual void push_animation(Animation& animation);
 	virtual void push_hud(const std::string& name, HUD& hud);
 	virtual void changeHUD(const std::string& name);
+	virtual void setMap(Map* map);
 };
 

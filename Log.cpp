@@ -33,3 +33,8 @@ void Log::Error(const std::string& str)
 	if (m_logLevel >= LogLevel_e::Error)
 		std::cout << "[ERROR] : " << str << "\n";
 }
+
+bool Log::LogIf(LogLevel_e level)
+{
+	return (level <= m_logLevel);
+}
